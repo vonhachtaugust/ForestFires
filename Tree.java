@@ -5,6 +5,7 @@ public class Tree {
 	private int row;
 	private int col;
 	private int state;
+	private boolean visited;
 
 	public Tree(int row, int col, int state) {
 		this.setRow(row);

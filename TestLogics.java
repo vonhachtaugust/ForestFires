@@ -6,14 +6,16 @@ public class TestLogics {
 
 	final static int row = 5;
 	final static int col = 5;
+	private static double p = 0.005;
+	private static double f = 0.3;
 	final static Random rand = new Random();
-	private static Grid grid = new Grid(row, col);
+	private static Grid grid = new Grid(row, col, 0.5, p, f);
 
 	public static void main(String[] args) {
 
 		grid.regrowth();
 
-		if (grid.lightningStrike()) {
+		if (grid.lightningStrike(false)) {
 			int a = grid.getBurning().size();
 			int b = 0;
 			int skip = 0;

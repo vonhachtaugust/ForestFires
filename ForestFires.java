@@ -21,10 +21,13 @@ public class ForestFires extends JPanel implements ActionListener {
 	final int height = 800;
 	final int timesteps = 100000;
 	public int timeStep = 0;
+	public double initialTreeDens = 0.5;
+	private double p = 0.005;
+	private double f = 0.3;
 
 	public static final int row = 400;
 	public static final int col = 400;
-	private static Grid grid = new Grid(row, col);
+	private Grid grid = new Grid(row, col, initialTreeDens, p, f);
 
 	public Random rand = new Random();
 
@@ -45,7 +48,7 @@ public class ForestFires extends JPanel implements ActionListener {
 		grid.getBurning().clear();
 		grid.regrowth();
 
-		if (grid.lightningStrike()) {
+		if (grid.lightningStrike(false)) {
 			int a = grid.getBurning().size();
 			int b = 0;
 			int skip = 0;
