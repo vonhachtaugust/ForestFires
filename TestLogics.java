@@ -15,7 +15,7 @@ public class TestLogics {
 
 		grid.regrowth();
 
-		if (grid.lightningStrike(false)) {
+		if (grid.lightningStrike()) {
 			int a = grid.getBurning().size();
 			int b = 0;
 			int skip = 0;

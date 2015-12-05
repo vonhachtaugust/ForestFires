@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 import Homeproblem3.Tree;
 
-public class Grid {
+public class CompareGrid {
 
 	final int row;
 	final int col;
@@ -22,7 +22,7 @@ public class Grid {
 	private List<Tree> burning = new ArrayList<>();
 	// private List<Tree> treePositions = new ArrayList<>();
 
-	public Grid(int row, int col, double initialTreeProb, double p, double f) {
+	public CompareGrid(int row, int col, double initialTreeProb, double p, double f) {
 		this.row = row;
 		this.col = col;
 		this.gridSize = row * col;

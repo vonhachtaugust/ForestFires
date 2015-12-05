@@ -17,22 +17,23 @@ import javax.swing.WindowConstants;
 
 public class ForestFires extends JPanel implements ActionListener {
 
-	final int width = 800;
-	final int height = 800;
+	final int width = 768;
+	final int height = 768;
 	final int timesteps = 100000;
 	public int timeStep = 0;
 	public double initialTreeDens = 0.5;
-	private double p = 0.005;
+	private double p = 0.01;
 	private double f = 0.3;
 
-	public static final int row = 400;
-	public static final int col = 400;
+	public static final int row = 128;
+	public static final int col = 128;
 	private Grid grid = new Grid(row, col, initialTreeDens, p, f);
 
 	public Random rand = new Random();
 
 	public static void main(String[] args) {
 		new ForestFires().program();
+		// new XYLogAxes();
 	}
 
 	void program() {
@@ -48,7 +49,7 @@ public class ForestFires extends JPanel implements ActionListener {
 		grid.getBurning().clear();
 		grid.regrowth();
 
-		if (grid.lightningStrike(false)) {
+		if (grid.lightningStrike()) {
 			int a = grid.getBurning().size();
 			int b = 0;
 			int skip = 0;
@@ -64,7 +65,7 @@ public class ForestFires extends JPanel implements ActionListener {
 			}
 			grid.removeBurnt(grid.getBurning());
 		}
-
+		System.out.println(grid.getGridDensity());
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				Tree tree = grid.getTree(i, j);
@@ -143,7 +144,7 @@ public class ForestFires extends JPanel implements ActionListener {
 
 	JButton a = new JButton("Start");
 	JButton b = new JButton("Stop");
-	Timer t = new Timer(10, this);
+	Timer t = new Timer(50, this);
 
 	private void initEvent() {
 		t.setInitialDelay(500);
