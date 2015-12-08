@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class rankFreqPlot {
-	final int timesteps = 40000;
+	final int timesteps = 10000;
 	public int timeStep = 0;
 	public double initialTreeDens = 0.5;
 	private List<Double> coords1 = new ArrayList();

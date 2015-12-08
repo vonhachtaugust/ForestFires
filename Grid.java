@@ -122,7 +122,7 @@ public class Grid {
 				List<Integer> bottomNeighbor = Arrays.asList(nextX,getIndBelow(nextY));
 				List<Integer> leftNeighbor = Arrays.asList(getIndLeftOf(nextX),nextY);
 				List<Integer> topNeighbor = Arrays.asList(nextX,getIndAbove(nextY));
-				List<List> neighbors = Arrays.asList(rightNeighbor, bottomNeighbor, leftNeighbor, topNeighbor);
+				List<List<Integer>> neighbors = Arrays.asList(rightNeighbor, bottomNeighbor, leftNeighbor, topNeighbor);
 
 				for (int k = 0; k < neighbors.size(); k++) {
 					List<Integer> thisNeighbor = neighbors.get(k);
