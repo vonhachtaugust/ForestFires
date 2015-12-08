@@ -15,18 +15,17 @@ public class Grid {
 	private double p = 0.005;
 	private double f = 0.3;
 	private double initialTreeProb;
-	private double currentTreeDens;
-
+	private double currentNumTrees;
 	public static Random rand = new Random();
 	private static Tree[][] grid;
 	private List<Tree> burning = new ArrayList<>();
-	// private List<Tree> treePositions = new ArrayList<>();
 
 	public Grid(int row, int col, double initialTreeProb, double p, double f) {
 		this.row = row;
 		this.col = col;
 		this.gridSize = row * col;
 		this.initialTreeProb = initialTreeProb;
+		this.currentNumTrees = 0;
 		this.p = p;
 		this.f = f;
 		this.setGrid();
@@ -76,13 +75,14 @@ public class Grid {
 		List<Integer> pos = new ArrayList<>();
 		int i = rand.nextInt(row);
 		int j = rand.nextInt(col);
-
-		//System.out.println("lightning strike in (" + i + "," + j + ")");
-		//System.out.println("rec search");
-
-		if (getTree(i, j) != null) {
-			pos = (Arrays.asList(i, j));
-			//System.out.println(pos);
+		if (forceStartFire) {
+			r = 1.0;
+			List<Integer> pos = searchTree(grid,i,j);
+			if (pos.contains(-1)) {
+				System.exit(0);
+			}
+			i = pos.get(0);
+			j = pos.get(1);
 		} else {
 			pos = searchTree(grid, i, j);
 			//System.out.println(pos);
@@ -106,11 +106,11 @@ public class Grid {
 	private List<Integer> searchTree(Tree[][] grid, int i, int j) {
 		List<List> toSearch = new ArrayList();
 		List<List> searched = new ArrayList();
-
-		toSearch.add(Arrays.asList(i, j));
-
+		toSearch.add(Arrays.asList(i,j));
+		
+		int numSearchedPos = 0;
 		while (!toSearch.isEmpty()) {
-			//System.out.println(toSearch);
+			System.out.println(toSearch);
 			List<Integer> thisPos = toSearch.remove(0);
 			int nextX = thisPos.get(0);
 			int nextY = thisPos.get(1);
@@ -123,19 +123,20 @@ public class Grid {
 				searched.add(thisPos);
 
 				// add neighbors to toSearch
-				List<Integer> rightNeighbor = Arrays.asList(getIndRightOf(nextX), nextY);
-				List<Integer> bottomNeighbor = Arrays.asList(nextX, getIndBelow(nextY));
-				List<Integer> leftNeighbor = Arrays.asList(getIndLeftOf(nextX), nextY);
-				List<Integer> topNeighbor = Arrays.asList(nextX, getIndAbove(nextY));
-				List<List<Integer>> neighbors = Arrays.asList(rightNeighbor, bottomNeighbor, leftNeighbor, topNeighbor);
+				List<Integer> rightNeighbor = Arrays.asList(getIndRightOf(nextX),nextY);
+				List<Integer> bottomNeighbor = Arrays.asList(nextX,getIndBelow(nextY));
+				List<Integer> leftNeighbor = Arrays.asList(getIndLeftOf(nextX),nextY);
+				List<Integer> topNeighbor = Arrays.asList(nextX,getIndAbove(nextY));
+				List<List> neighbors = Arrays.asList(rightNeighbor, bottomNeighbor, leftNeighbor, topNeighbor);
 
 				for (int k = 0; k < neighbors.size(); k++) {
 					List<Integer> thisNeighbor = neighbors.get(k);
-					if (!searched.contains(thisNeighbor) && !toSearch.contains(thisNeighbor)) {
+					if (!toSearch.contains(thisNeighbor) && !searched.contains(thisNeighbor)) {
 						toSearch.add(thisNeighbor);
 					}
 				}
 			}
+			numSearchedPos++;
 		}
 		return Arrays.asList(-1, -1);
 	}
@@ -186,16 +187,12 @@ public class Grid {
 			grid[tree.getRow()][tree.getCol()] = null;
 		}
 	}
-
-	private void updateGridDensity(double numTreesDelta) {
-		currentTreeDens += numTreesDelta / gridSize;
-		if (currentTreeDens < Math.pow(10, -10)) {
-			currentTreeDens = 0;
-		}
+	private void updateGridDensity(int numTreesDelta) {
+		currentNumTrees += numTreesDelta;
 	}
 
 	public double getGridDensity() {
-		return currentTreeDens;
+		return currentNumTrees / gridSize;
 	}
 
 	public int getGridSize() {
