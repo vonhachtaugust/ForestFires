@@ -33,7 +33,7 @@ public class XYScatterLogAxes extends JFrame {
 	private static List<Double> coords1;
 	private static List<Double> coords2;
 
-	private double tau = 1.23;
+	private double tau = 1.10;
 
 	// Constructor
 	public XYScatterLogAxes(List<Double> coords1, List<Double> coords2) {
@@ -167,8 +167,9 @@ public class XYScatterLogAxes extends JFrame {
 	public List<List<Double>> generatePowerNumbers(double x_min, double tau, int num) {
 		List<List<Double>> powerNumbers = new ArrayList(num);
 		for (int i = 0; i < num; i++) {
-			double r = Math.random();
-			double powerNumber = x_min * Math.pow(1 - r, -1 / (tau - 1));
+			double r = Math.random() * 0.6 + 0.0001;
+			//double powerNumber = x_min * Math.pow(1 - r, (double) 1 / (1-tau));
+			double powerNumber = Math.pow(Math.pow(1 - r, (double) 1 / (1-tau)),-tau);
 			powerNumbers.add(Arrays.asList(r, powerNumber));
 		}
 		return powerNumbers;
