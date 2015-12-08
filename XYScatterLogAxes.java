@@ -100,6 +100,7 @@ public class XYScatterLogAxes extends JFrame {
 
 		final XYSeries s1 = new XYSeries("Original fire");
 		final XYSeries s2 = new XYSeries("Recreated fire");
+		final XYSeries s3 = new XYSeries("Synthetic data");
 
 		Collections.sort(coords1);
 		Collections.sort(coords2);
@@ -117,77 +118,31 @@ public class XYScatterLogAxes extends JFrame {
 			double xVal = coords2.get(j - 1);
 			s2.add(xVal, yVal);
 		}
+		
+		double tau = 1.15;
+		Double x_min = (Double) coords1.get(coords1.size()-1);
+		List<List<Double>> powerData = generatePowerNumbers(x_min, tau, coords1.size());
+		for (int j = 0; j < powerData.size(); j++) {
+			List<Double> thisPoint = powerData.get(j);
+			double yVal = thisPoint.get(2);
+			double xVal = thisPoint.get(1);
+			s3.add(xVal, yVal);
+		}
 
 		dataset.addSeries(s1);
 		dataset.addSeries(s2);
-		
-		firstFit = new LinearRegression(coords1);
-		secondFit = new LinearRegression(coords2);
+		dataset.addSeries(s3);
 
 		return dataset;
 	}
-
-	public class LinearRegression { 
-		
-
-	    public LinearRegression(List<Double> StdIn) { 
-	        int MAXN = StdIn.size();
-	        int n = 0;
-	        double[] x = new double[MAXN];
-	        double[] y = new double[MAXN];
-
-	        // first pass: read in data, compute xbar and ybar
-	        double sumx = 0.0;
-	        double sumy = 0.0; 
-	        double sumx2 = 0.0;
-	        while(n < StdIn.size() ) {
-	            x[n] = (double) StdIn.get(n);
-	            y[n] = (double) StdIn.get(n);
-	            sumx  += (double) x[n];
-	            sumx2 += (double) x[n] * x[n];
-	            sumy  += (double) y[n];
-	            n++;
-	        }
-	        double xbar = (double) sumx / n;
-	        double ybar = (double) sumy / n;
-
-	        // second pass: compute summary statistics
-	        double xxbar = 0.0; 
-	        double yybar = 0.0;
-	        double xybar = 0.0;
-	        for (int i = 0; i < n; i++) {
-	            xxbar += (double) (x[i] - xbar) * (x[i] - xbar);
-	            yybar += (double) (y[i] - ybar) * (y[i] - ybar);
-	            xybar += (double) (x[i] - xbar) * (y[i] - ybar);
-	        }
-	        double beta1 = (double) xybar / xxbar;
-	        double beta0 = (double) ybar - beta1 * xbar;
-
-	        // print results
-	        System.out.println("y   = " + beta1 + " * x + " + beta0);
-
-	        // analyze results
-	        int df = n - 2;
-	        double rss = 0.0;      // residual sum of squares
-	        double ssr = 0.0;      // regression sum of squares
-	        for (int i = 0; i < n; i++) {
-	            double fit = (double) beta1*x[i] + beta0;
-	            rss += (double) (fit - y[i]) * (fit - y[i]);
-	            ssr += (double) (fit - ybar) * (fit - ybar);
-	        }
-	        double R2    = (double) ssr / yybar;
-	        double svar  = (double) rss / df;
-	        double svar1 = (double) svar / xxbar;
-	        double svar0 = (double) svar/n + xbar*xbar*svar1;
-	        System.out.println("R^2                 = " + R2);
-	        System.out.println("std error of beta_1 = " + Math.sqrt(svar1));
-	        System.out.println("std error of beta_0 = " + Math.sqrt(svar0));
-	        svar0 = (double) svar * sumx2 / (n * xxbar);
-	        System.out.println("std error of beta_0 = " + Math.sqrt(svar0));
-
-	        System.out.println("SSTO = " + yybar);
-	        System.out.println("SSE  = " + rss);
-	        System.out.println("SSR  = " + ssr);
-	    }
+	
+	public List<List<Double>> generatePowerNumbers(double x_min, double tau, int num) {
+		List<List<Double>> powerNumbers = new ArrayList(num);
+		for (int i = 0; i < num; i++) {
+			double r = Math.random();
+			double powerNumber = x_min * Math.pow(1-r,-1/(tau - 1));
+			powerNumbers.add(Arrays.asList(r,powerNumber));
+		}
+		return powerNumbers;
 	}
 }
