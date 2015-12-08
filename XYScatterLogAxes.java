@@ -32,8 +32,6 @@ public class XYScatterLogAxes extends JFrame {
 
 	private static List<Double> coords1;
 	private static List<Double> coords2;
-	private LinearRegression firstFit;
-	private LinearRegression secondFit;
 
 	// Constructor
 	public XYScatterLogAxes(List<Double> coords1, List<Double> coords2) {
