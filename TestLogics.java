@@ -1,5 +1,7 @@
 package Homeproblem3;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class TestLogics {
@@ -57,6 +59,16 @@ public class TestLogics {
 			System.out.println();
 		}
 
+	}
+	
+	public List<Double> generatePowerNumbers(double x_min, double tau, int num) {
+		List<Double> powerNumbers = new ArrayList(num);
+		for (int i = 0; i < num; i++) {
+			double r = Math.random();
+			double powerNumber = x_min * Math.pow(1-r,-1/(tau - 1));
+			powerNumbers.add(powerNumber);
+		}
+		return powerNumbers;
 	}
 
 }
