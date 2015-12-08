@@ -20,6 +20,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.LogarithmicAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataItem;
@@ -33,7 +34,7 @@ public class XYScatterLogAxes extends JFrame {
 	private static List<Double> coords1;
 	private static List<Double> coords2;
 
-	private double tau = 1.10;
+	private double tau = 1.15;
 
 	// Constructor
 	public XYScatterLogAxes(List<Double> coords1, List<Double> coords2) {
@@ -64,13 +65,24 @@ public class XYScatterLogAxes extends JFrame {
 		JFreeChart chart = ChartFactory.createScatterPlot(chartTitle, xAxisLabel, yAxisLabel, dataset);
 
 		XYPlot plot = chart.getXYPlot();
-		// XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,
-		// false);
+
+		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+
+		renderer.setSeriesShapesVisible(0, true);
+		renderer.setSeriesShapesVisible(1, true);
+		renderer.setSeriesShapesVisible(2, true);
+		renderer.setSeriesLinesVisible(3, true);
 
 		Shape cross = ShapeUtilities.createDiagonalCross(1, 1);
-		XYItemRenderer renderer = plot.getRenderer();
+		Shape derp = ShapeUtilities.createDiagonalCross(0, 0);
 		renderer.setSeriesShape(0, cross);
+		renderer.setSeriesPaint(0, Color.RED);
 		renderer.setSeriesShape(1, cross);
+		renderer.setSeriesPaint(1, Color.BLUE);
+		renderer.setSeriesShape(2, cross);
+		renderer.setSeriesPaint(2, Color.GREEN);
+		renderer.setSeriesShape(3, derp, false);
+		renderer.setSeriesPaint(3, Color.BLACK);
 
 		NumberAxis range = (NumberAxis) plot.getRangeAxis();
 		range.setNumberFormatOverride(NumberFormat.getNumberInstance());
@@ -101,7 +113,7 @@ public class XYScatterLogAxes extends JFrame {
 		final XYSeries s2 = new XYSeries("Recreated fire");
 		final XYSeries s3 = new XYSeries("Synthetic data");
 
-		final XYSeries linear = new XYSeries("Hello");
+		final XYSeries line = new XYSeries("Hello");
 
 		Collections.sort(coords1);
 		Collections.sort(coords2);
@@ -136,11 +148,14 @@ public class XYScatterLogAxes extends JFrame {
 		double minX = (double) 1 / 10000;
 		double steplength = (xMax - xMin) / nrOfDataPoints;
 
-		for (int i = 1; i <= nrOfDataPoints + 1; i++) {
-			double xVal = (double) (xMin + (i - 1) * steplength);
-			double yVal = getY(xVal, minX);
-			linear.add(xVal, yVal);
-		}
+		line.add(Math.pow(10, -4), getY(Math.pow(10, -4), minX));
+		line.add(Math.pow(10, Math.log(0.8)), getY(Math.pow(10, Math.log(0.8)), minX));
+
+		/*
+		 * for (int i = 1; i <= nrOfDataPoints + 1; i++) { double xVal =
+		 * (double) (xMin + (i - 1) * steplength); double yVal = getY(xVal,
+		 * minX); line.add(xVal, yVal); }
+		 */
 
 		/*
 		 * secondFit = new LinearRegression(linearFit2);
@@ -160,7 +175,7 @@ public class XYScatterLogAxes extends JFrame {
 		dataset.addSeries(s1);
 		dataset.addSeries(s2);
 		dataset.addSeries(s3);
-		dataset.addSeries(linear);
+		dataset.addSeries(line);
 		return dataset;
 	}
 
@@ -168,8 +183,9 @@ public class XYScatterLogAxes extends JFrame {
 		List<List<Double>> powerNumbers = new ArrayList(num);
 		for (int i = 0; i < num; i++) {
 			double r = Math.random() * 0.6 + 0.0001;
-			//double powerNumber = x_min * Math.pow(1 - r, (double) 1 / (1-tau));
-			double powerNumber = Math.pow(Math.pow(1 - r, (double) 1 / (1-tau)),-tau);
+			// double powerNumber = x_min * Math.pow(1 - r, (double) 1 /
+			// (1-tau));
+			double powerNumber = Math.pow(Math.pow(1 - r, (double) 1 / (1 - tau)), -tau);
 			powerNumbers.add(Arrays.asList(r, powerNumber));
 		}
 		return powerNumbers;
