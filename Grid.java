@@ -75,18 +75,13 @@ public class Grid {
 		List<Integer> pos = new ArrayList<>();
 		int i = rand.nextInt(row);
 		int j = rand.nextInt(col);
-		if (forceStartFire) {
-			r = 1.0;
-			List<Integer> pos = searchTree(grid,i,j);
-			if (pos.contains(-1)) {
-				System.exit(0);
-			}
-			i = pos.get(0);
-			j = pos.get(1);
-		} else {
-			pos = searchTree(grid, i, j);
-			//System.out.println(pos);
+		double r = 1.0;
+		pos = searchTree(grid,i,j);
+		if (pos.contains(-1)) {
+			System.exit(0);
 		}
+		i = pos.get(0);
+		j = pos.get(1);
 		return pos;
 	}
 
@@ -187,7 +182,7 @@ public class Grid {
 			grid[tree.getRow()][tree.getCol()] = null;
 		}
 	}
-	private void updateGridDensity(int numTreesDelta) {
+	private void updateGridDensity(double numTreesDelta) {
 		currentNumTrees += numTreesDelta;
 	}
 
