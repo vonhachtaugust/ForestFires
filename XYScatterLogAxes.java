@@ -33,6 +33,8 @@ public class XYScatterLogAxes extends JFrame {
 	private static List<Double> coords1;
 	private static List<Double> coords2;
 
+	private double tau = 1.23;
+
 	// Constructor
 	public XYScatterLogAxes(List<Double> coords1, List<Double> coords2) {
 		super(" ");
@@ -48,7 +50,7 @@ public class XYScatterLogAxes extends JFrame {
 		add(chartPanel, BorderLayout.CENTER);
 
 		setVisible(true);
-		
+
 	}
 
 	private JPanel createChartPanel() {
@@ -58,8 +60,7 @@ public class XYScatterLogAxes extends JFrame {
 		String yAxisLabel = "cCDF";
 
 		XYDataset dataset = createDataset();
-		
-		
+
 		JFreeChart chart = ChartFactory.createScatterPlot(chartTitle, xAxisLabel, yAxisLabel, dataset);
 
 		XYPlot plot = chart.getXYPlot();
@@ -100,6 +101,8 @@ public class XYScatterLogAxes extends JFrame {
 		final XYSeries s2 = new XYSeries("Recreated fire");
 		final XYSeries s3 = new XYSeries("Synthetic data");
 
+		final XYSeries linear = new XYSeries("Hello");
+
 		Collections.sort(coords1);
 		Collections.sort(coords2);
 		Collections.reverse(coords1);
@@ -116,31 +119,62 @@ public class XYScatterLogAxes extends JFrame {
 			double xVal = coords2.get(j - 1);
 			s2.add(xVal, yVal);
 		}
-		
-		double tau = 1.15;
-		Double x_min = (Double) coords1.get(coords1.size()-1);
+
+		double xMin = 0.0001;
+		double x_min = xMin;
+		// (Double) coords1.get(coords1.size() - 1);
 		List<List<Double>> powerData = generatePowerNumbers(x_min, tau, coords1.size());
 		for (int j = 0; j < powerData.size(); j++) {
 			List<Double> thisPoint = powerData.get(j);
-			double yVal = thisPoint.get(2);
-			double xVal = thisPoint.get(1);
+			double yVal = thisPoint.get(1);
+			double xVal = thisPoint.get(0);
 			s3.add(xVal, yVal);
 		}
 
+		int nrOfDataPoints = 100;
+		double xMax = 0.2;
+		double minX = (double) 1 / 10000;
+		double steplength = (xMax - xMin) / nrOfDataPoints;
+
+		for (int i = 1; i <= nrOfDataPoints + 1; i++) {
+			double xVal = (double) (xMin + (i - 1) * steplength);
+			double yVal = getY(xVal, minX);
+			linear.add(xVal, yVal);
+		}
+
+		/*
+		 * secondFit = new LinearRegression(linearFit2);
+		 * 
+		 * /System.out.println("X=" + coords2.get(0)); System.out.println("Y=" +
+		 * getY(coords2.get(0), slope, intersect));
+		 * 
+		 * System.out.println("X=" + coords2.get(coords2.size() / 2));
+		 * System.out.println("Y=" + getY(coords2.get(coords2.size() / 2),
+		 * slope, intersect));
+		 * 
+		 * 
+		 * linear2.add((double) coords2.get(0), getY(coords2.get(0), slope,
+		 * intersect)); linear2.add((double) coords2.get(coords2.size() / 2),
+		 * getY(coords2.get(coords2.size() / 2), slope, intersect));
+		 */
 		dataset.addSeries(s1);
 		dataset.addSeries(s2);
 		dataset.addSeries(s3);
-
+		dataset.addSeries(linear);
 		return dataset;
 	}
-	
+
 	public List<List<Double>> generatePowerNumbers(double x_min, double tau, int num) {
 		List<List<Double>> powerNumbers = new ArrayList(num);
 		for (int i = 0; i < num; i++) {
 			double r = Math.random();
-			double powerNumber = x_min * Math.pow(1-r,-1/(tau - 1));
-			powerNumbers.add(Arrays.asList(r,powerNumber));
+			double powerNumber = x_min * Math.pow(1 - r, -1 / (tau - 1));
+			powerNumbers.add(Arrays.asList(r, powerNumber));
 		}
 		return powerNumbers;
+	}
+
+	public double getY(double xPos, double xmin) {
+		return Math.pow(xPos / (xmin), (double) 1 - tau);
 	}
 }
