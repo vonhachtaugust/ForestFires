@@ -2,9 +2,11 @@
 
 Using a simple java simulation we study how the forest density is related to the size of the developed fire due to a lightning strike.
 
+![alt text](https://github.com/vonhachtaugust/ForestFires/blob/master/ForestFires.png)
+
 ## Getting Started
 
-There are no external dependencies required in order to play around with the model parameters. The Java code utilizes basic libraries found in any modern java JDK. However, in order to plot the results one needs a plotting tool that can go along with java code.
+There are no external dependencies required in order to play around with the model parameters. The Java code utilizes basic libraries found in any modern java JDK. However, in order to plot the results one  needs a plotting tool that can go along with java code.
 
 ### Prerequisites
 
@@ -24,7 +26,7 @@ Feel free to contributing. As for now, there are no specific requirements for co
 
 * **Karl Bäckström** - *Initial work* - [karlback](https://github.com/karlback)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/vonhachtaugust/ForestFires/contributors) who participated in this project.
 
 ## License
 
