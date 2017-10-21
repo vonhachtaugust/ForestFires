@@ -15,7 +15,7 @@ Nothing to install. Add the Java classes to your existing project.
 Currently there are no testing environment.
 ## Contributing
 
-Feel free to contributing. As for now, there are no specific requiredments for contributing.
+Feel free to contributing. As for now, there are no specific requirements for contributing.
 
 ## Authors
 
