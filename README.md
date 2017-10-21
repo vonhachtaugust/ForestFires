@@ -4,7 +4,7 @@ Using a simple java simulation we study how the forest density is related to the
 
 ## Getting Started
 
-There are no external dependencies required in order to play around with the model parameters. The Java code utilizes basic libraries found in any modern java runtime environment (JRE). However, in order to plot the results one needs a plotting tool that can go along with java code.
+There are no external dependencies required in order to play around with the model parameters. The Java code utilizes basic libraries found in any modern java JDK. However, in order to plot the results one needs a plotting tool that can go along with java code.
 
 ### Prerequisites
 
@@ -12,7 +12,8 @@ Nothing to install. Add the Java classes to your existing project.
 
 ## Running the tests
 
-Currently there are no testing environment.
+Currently there is no testing environment.
+
 ## Contributing
 
 Feel free to contributing. As for now, there are no specific requirements for contributing.

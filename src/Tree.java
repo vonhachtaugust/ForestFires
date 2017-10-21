@@ -1,4 +1,4 @@
-package Homeproblem3;
+package ForestFires;
 
 public class Tree {
 

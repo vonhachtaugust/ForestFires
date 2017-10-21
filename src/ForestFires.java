@@ -1,4 +1,4 @@
-package Homeproblem3;
+package ForestFires;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,35 +15,41 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
+import java.lang.Thread;
+
 public class ForestFires extends JPanel implements ActionListener {
 
 	final double timeFactor = 100;
 	final int nrOfStrikesPerGrownTree = 10;
-
 	final int width = 768;
 	final int height = 768;
 	final int timesteps = 1000000;
-	public int timeStep = 0;
-	public double initialTreeDens = 0.5;
+
+  public static int timeStep = 0;
+  public static double initialTreeDens = 0.5;
+  public static final int row = 128;
+  public static final int col = 128;
+  public static Random rand = new Random();
+
 	private double p = timeFactor * (1.0 / (row * col));
 	private double f = timeFactor * (1.0 / nrOfStrikesPerGrownTree);
-
-	public static final int row = 128;
-	public static final int col = 128;
 	private Grid grid = new Grid(row, col, initialTreeDens, p, f);
+  private JButton a = new JButton("Start");
+  private JButton b = new JButton("Stop");
+  private Timer t = new Timer(10, this);
 
-	public Random rand = new Random();
-  JButton a = new JButton("Start");
-  JButton b = new JButton("Stop");
-  Timer t = new Timer(10, this);
+  public static void main(String[] args) {
+      new ForestFires().program();
+      // new XYLogAxes(); // If library available
+  }
 
 
-	void program() {
+	private void program() {
 		initEvent();
 		initGraphics();
 	}
 
-	public void paint(Graphics g) {
+  public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
 		timeStep++;
@@ -78,17 +84,20 @@ public class ForestFires extends JPanel implements ActionListener {
 			}
 		}
 
-		if (grid.getGridDensity() * (row * col) < 0.4 * (row * col)) {
-			t.stop();
-			System.out.println(grid.getGridDensity() * (row * col) + ">" + 0.3 * (row * col));
-
-		}
+		//if (grid.getGridDensity() * (row * col) < 0.4 * (row * col)) {
+		//	t.stop();
+		//	System.out.println(grid.getGridDensity() * (row * col) + ">" + 0.3 * (row * col));
+		//}
 
 		if (timeStep > timesteps) {
 			t.stop();
 			// new XYLineChart(row * col);
 		}
-
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException e) {
+      System.err.println("Caught InterruptedException: " + e.getMessage());
+    }
 	}
 
 	public Color getStateColor(int s) {
@@ -109,27 +118,24 @@ public class ForestFires extends JPanel implements ActionListener {
 		return (p.getRow()) * cellHeight;
 	}
 
-	void initGraphics() {
+	private void initGraphics() {
 
 		setPreferredSize(new Dimension(width, height));
 		JFrame window = new JFrame("Title");
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		window.setLayout(new BorderLayout());
+    window.setLayout(new BorderLayout());
 		window.add(this, BorderLayout.CENTER);
-		window.pack();
-		window.setLocationRelativeTo(null);
-		window.setVisible(true);
 
 		JPanel p = new JPanel();
-
-		a.addActionListener(this);
+    a.addActionListener(this);
 		p.add(a);
-
 		b.addActionListener(this);
 		p.add(b);
+    window.add(p, BorderLayout.SOUTH);
 
-		window.add(p, BorderLayout.SOUTH);
-
+    window.pack();
+    window.setLocationRelativeTo(null);
+		window.setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -154,8 +160,3 @@ public class ForestFires extends JPanel implements ActionListener {
 	}
 }
 
-public static void main(String[] args) {
-		new ForestFires().program();
-    // Only if library available (XY plot Java library something ... use whatever you prefer otherwise.)
-		// new XYLogAxes();
-}

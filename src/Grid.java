@@ -1,11 +1,10 @@
-package Homeproblem3;
+package ForestFires;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import Homeproblem3.Tree;
 
 public class Grid {
 
@@ -30,7 +29,7 @@ public class Grid {
 		this.p = p;
 		this.f = f;
     this.grid = new Tree[row][col];
-    initTress();
+    initTrees();
 	}
 
   public void initTrees() {
@@ -104,14 +103,11 @@ public class Grid {
 		toSearch.add(Arrays.asList(i,j));
 		int numSearchedPos = 0;
 		while (!toSearch.isEmpty()) {
-			System.out.println(toSearch);
 			List<Integer> thisPos = toSearch.remove(0);
 			int nextX = thisPos.get(0);
 			int nextY = thisPos.get(1);
 
-			//System.out.println("Currently checking" + "(" + nextX + "," + nextY + ")");
 			if (grid[nextX][nextY] != null) {
-				//System.out.println(grid[nextX][nextY].toString());
 				return Arrays.asList(nextX, nextY);
 			} else {
 				searched.add(thisPos);

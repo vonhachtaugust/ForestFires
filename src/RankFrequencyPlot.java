@@ -1,10 +1,10 @@
-package Homeproblem3;
+package ForestFires;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class rankFreqPlot {
+public class RankFrequencyPlot {
 	final int timesteps = 10000;
 	public int timeStep = 0;
 	public double initialTreeDens = 0.5;
@@ -19,10 +19,16 @@ public class rankFreqPlot {
 
 	public Random rand = new Random();
 
+  public static void main(String[] args) {
+      new RankFrequencyPlot().program();
+  }
+
 	void program() {
 		while (timeStep < timesteps) {
 			double density = rankFreq();
-      comparedRankFreq(density);
+      if (density != -1) {
+        comparedRankFreqPlot(density);
+      }
 		}
     // If this third-library is available ...
 		//new XYScatterLogAxes(coords1, coords2);
@@ -34,9 +40,10 @@ public class rankFreqPlot {
 
 		grid.getBurning().clear();
 		grid.regrowth();
+    double densBeforeFire = -1;
 
 		if (grid.lightningStrike()) {
-			double densBeforeFire = grid.getGridDensity();
+			densBeforeFire = grid.getGridDensity();
 
 			int a = 1;
 			int b = 0;
@@ -50,13 +57,13 @@ public class rankFreqPlot {
       coords1.add((double) grid.getBurning().size() / grid.getGridSize());
 			grid.removeBurnt(grid.getBurning());
 			grid.getBurning().clear();
-      return densBeforeFire;
 		}
+    return densBeforeFire;
 	}
 
-	private void comparedFreqPlot(double density) {
+	private void comparedRankFreqPlot(double density) {
     // (TODO) We dont need to construct a new grid every timestep
-		Grid compareGrid = new Grid(row, col, dens, p, f);
+		Grid compareGrid = new Grid(row, col, density, p, f);
 
 		List<Integer> pos = compareGrid.guaranteedStrike();
 		Tree tree = compareGrid.getTree(pos.get(0), pos.get(1));
@@ -72,12 +79,8 @@ public class rankFreqPlot {
 			b = compareGrid.getBurning().size();
 			skip = b - a;
     }
-    corrds2.add((double) grid.getBurning().size() / grid.getGridSize());
+    coords2.add((double) grid.getBurning().size() / grid.getGridSize());
     compareGrid.removeBurnt(compareGrid.getBurning());
     compareGrid.getBurning().clear();
 	}
-}
-
-public static void main(String[] args) {
-		new rankFreqPlot().program();
 }
