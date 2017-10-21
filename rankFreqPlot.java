@@ -19,18 +19,17 @@ public class rankFreqPlot {
 
 	public Random rand = new Random();
 
-	public static void main(String[] args) {
-		new rankFreqPlot().program();
-	}
-
 	void program() {
 		while (timeStep < timesteps) {
-			rankFreq();
+			double density = rankFreq();
+      comparedRankFreq(density);
 		}
-		new XYScatterLogAxes(coords1, coords2);
+    // If this third-library is available ...
+		//new XYScatterLogAxes(coords1, coords2);
 	}
 
-	public void rankFreq() {
+  // (TODO) General improvements can be made here
+	public double rankFreq() {
 		timeStep++;
 
 		grid.getBurning().clear();
@@ -39,7 +38,7 @@ public class rankFreqPlot {
 		if (grid.lightningStrike()) {
 			double densBeforeFire = grid.getGridDensity();
 
-			int a = grid.getBurning().size();
+			int a = 1;
 			int b = 0;
 			int skip = 0;
 			while (a != b) {
@@ -48,32 +47,37 @@ public class rankFreqPlot {
 				b = grid.getBurning().size();
 				skip = b - a;
 			}
-			coords1.add((double) grid.getBurning().size() / grid.getGridSize());
+      coords1.add((double) grid.getBurning().size() / grid.getGridSize());
 			grid.removeBurnt(grid.getBurning());
 			grid.getBurning().clear();
-			double val = comparedFreqPlot(densBeforeFire);
-			coords2.add(val / grid.getGridSize());
+      return densBeforeFire;
 		}
 	}
 
-	private double comparedFreqPlot(double dens) {
+	private void comparedFreqPlot(double density) {
+    // (TODO) We dont need to construct a new grid every timestep
+		Grid compareGrid = new Grid(row, col, dens, p, f);
 
-		CompareGrid lattice = new CompareGrid(row, col, dens, p, f);
-
-		List<Integer> pos = lattice.guaranteedStrike();
-		Tree tree = lattice.getTree(pos.get(0), pos.get(1));
+		List<Integer> pos = compareGrid.guaranteedStrike();
+		Tree tree = compareGrid.getTree(pos.get(0), pos.get(1));
 		tree.setState(1);
-		lattice.getBurning().add(tree);
+		compareGrid.getBurning().add(tree);
 
-		int a = lattice.getBurning().size();
+		int a = 1;
 		int b = 0;
 		int skip = 0;
 		while (a != b) {
-			a = lattice.getBurning().size();
-			lattice.setOnFire(a - skip);
-			b = lattice.getBurning().size();
+			a = compareGrid.getBurning().size();
+			compareGrid.setOnFire(a - skip);
+			b = compareGrid.getBurning().size();
 			skip = b - a;
-		}
-		return lattice.getBurning().size();
+    }
+    corrds2.add((double) grid.getBurning().size() / grid.getGridSize());
+    compareGrid.removeBurnt(compareGrid.getBurning());
+    compareGrid.getBurning().clear();
 	}
+}
+
+public static void main(String[] args) {
+		new rankFreqPlot().program();
 }

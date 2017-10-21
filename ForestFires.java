@@ -17,8 +17,6 @@ import javax.swing.WindowConstants;
 
 public class ForestFires extends JPanel implements ActionListener {
 
-	// 100 träd per tidsteg multiplicerat med tid factor.
-
 	final double timeFactor = 100;
 	final int nrOfStrikesPerGrownTree = 10;
 
@@ -35,11 +33,10 @@ public class ForestFires extends JPanel implements ActionListener {
 	private Grid grid = new Grid(row, col, initialTreeDens, p, f);
 
 	public Random rand = new Random();
+  JButton a = new JButton("Start");
+  JButton b = new JButton("Stop");
+  Timer t = new Timer(10, this);
 
-	public static void main(String[] args) {
-		new ForestFires().program();
-		// new XYLogAxes();
-	}
 
 	void program() {
 		initEvent();
@@ -152,11 +149,13 @@ public class ForestFires extends JPanel implements ActionListener {
 		repaint();
 	}
 
-	JButton a = new JButton("Start");
-	JButton b = new JButton("Stop");
-	Timer t = new Timer(10, this);
-
 	private void initEvent() {
 		t.setInitialDelay(500);
 	}
+}
+
+public static void main(String[] args) {
+		new ForestFires().program();
+    // Only if library available (XY plot Java library something ... use whatever you prefer otherwise.)
+		// new XYLogAxes();
 }

@@ -16,9 +16,10 @@ public class Grid {
 	private double f = 0.3;
 	private double initialTreeProb;
 	private double currentNumTrees;
-	public static Random rand = new Random();
 	private static Tree[][] grid;
 	private List<Tree> burning = new ArrayList<>();
+
+  public static Random rand = new Random();
 
 	public Grid(int row, int col, double initialTreeProb, double p, double f) {
 		this.row = row;
@@ -28,14 +29,13 @@ public class Grid {
 		this.currentNumTrees = 0;
 		this.p = p;
 		this.f = f;
-		this.setGrid();
+    this.grid = new Tree[row][col];
+    initTress();
 	}
 
-	public void setGrid() {
-		grid = new Tree[row][col];
-		addTrees(row, col);
-		this.grid = grid;
-	}
+  public void initTrees() {
+    addTrees(row, col);
+  }
 
 	public Tree[][] getGrid() {
 		return grid;
@@ -102,7 +102,6 @@ public class Grid {
 		List<List> toSearch = new ArrayList();
 		List<List> searched = new ArrayList();
 		toSearch.add(Arrays.asList(i,j));
-		
 		int numSearchedPos = 0;
 		while (!toSearch.isEmpty()) {
 			System.out.println(toSearch);
@@ -229,5 +228,4 @@ public class Grid {
 	public List<Tree> getBurning() {
 		return burning;
 	}
-
 }
