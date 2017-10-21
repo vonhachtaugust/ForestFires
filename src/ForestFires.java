@@ -121,7 +121,7 @@ public class ForestFires extends JPanel implements ActionListener {
 	private void initGraphics() {
 
 		setPreferredSize(new Dimension(width, height));
-		JFrame window = new JFrame("Title");
+		JFrame window = new JFrame("ForestFires");
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     window.setLayout(new BorderLayout());
 		window.add(this, BorderLayout.CENTER);
